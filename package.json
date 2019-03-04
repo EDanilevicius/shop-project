@@ -5,7 +5,9 @@
   "dependencies": {
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
+    "react-scripts": "2.1.5",
+    "react-spinners": "^0.5.3",
+    "reset-css": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -35,6 +37,7 @@
     "i": "^0.3.6",
     "node-sass": "^4.11.0",
     "npm": "^6.8.0",
-    "prettier": "^1.16.4"
+    "prettier": "^1.16.4",
+    "prop-types": "^15.7.2"
   }
 }

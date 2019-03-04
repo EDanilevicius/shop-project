@@ -1,0 +1,38 @@
+.Products-Page {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .Product-Card {
+    max-width: 400px;
+    max-height: 600px;
+    margin: 15px;
+    border: solid;
+    border-width: 2px;
+    position: relative;
+
+    img {
+      width: 100%;
+      max-width: 400px;
+    }
+    h3 {
+      font-size: 28px;
+      text-transform: uppercase;
+    }
+    span {
+      padding: 5px;
+      text-align: center;
+    }
+    p {
+      padding-bottom: 30px;
+    }
+    .Card-Buttons {
+      position: absolute;
+      bottom: 0;
+      :hover {
+        transform: scale(2);
+        background-color: rgba(81, 255, 0, 0.863);
+      }
+    }
+  }
+}
