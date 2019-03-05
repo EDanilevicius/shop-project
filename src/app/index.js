@@ -1,6 +1,6 @@
 import React from "react";
 import { PacmanLoader } from "react-spinners";
-import { Shop } from "./pages";
+import { Shop, Favorites } from "./pages";
 import { PageLayout } from "./components";
 
 const NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
@@ -23,11 +23,29 @@ class App extends React.Component {
     this.setState({ loading: true });
     fetch("https://boiling-reaches-93648.herokuapp.com/food-shop/products")
       .then(response => response.json())
-      .then(json => this.setState({ products: json, loading: false }))
+      .then(json => {
+        const products = json.map(product => ({
+          ...product,
+          isFavorite: false,
+        }));
+        this.setState({ products, loading: false });
+      })
       .catch(() =>
         this.setState({ error: "Something gone wrong", loading: false })
       );
   }
+
+  toggleFavorite = id => {
+    // console.log("Toggle Favorite", id);
+    this.setState(state => ({
+      products: state.products.map(product => {
+        if (product.id === id) {
+          return { ...product, isFavorite: !product.isFavorite };
+        }
+        return product;
+      }),
+    }));
+  };
 
   render() {
     const { products, loading, error } = this.state;
@@ -36,8 +54,11 @@ class App extends React.Component {
       <PageLayout navLinks={NAV_LINKS}>
         {loading && <PacmanLoader />}
         {error && <h2 className="errorMessage">{error}</h2>}
-
-        <Shop products={products} />
+        <Favorites
+          products={products.filter(product => product.isFavorite)}
+          toggleFavorite={this.toggleFavorite}
+        />
+        <Shop products={products} toggleFavorite={this.toggleFavorite} />
       </PageLayout>
     );
   }
