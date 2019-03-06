@@ -10,22 +10,25 @@ function ProductCard({
   id,
   isFavorite,
   toggleFavorite,
+  cartCount,
   description,
+  updateCartCount,
 }) {
   return (
     <div key={id} className="Product-Card">
       <img src={image} alt={name} />
       <h3>{name}</h3>
-      <span>
+      <span className="Price">
         {price}-{currencySymbol}
       </span>
       <p>{description}</p>
       <div className="Card-Buttons">
-        <button type="submit">
-          <span role="img" aria-label="shopping cart">
-            🛒 Checkout
-          </span>
-        </button>
+        <input
+          type="number"
+          min={0}
+          onChange={e => updateCartCount(id, e.target.value)}
+          value={cartCount}
+        />
         <button type="submit" onClick={() => toggleFavorite(id)}>
           <span role="img" aria-label="favorites button">
             {isFavorite ? "💔 Favorite" : "👍 Add to favorites"}
@@ -44,7 +47,10 @@ ProductCard.propTypes = {
   price: PropTypes.string.isRequired,
   isFavorite: PropTypes.bool.isRequired,
   toggleFavorite: PropTypes.func.isRequired,
+  cartCount: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
+    .isRequired,
   description: PropTypes.string.isRequired,
+  updateCartCount: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

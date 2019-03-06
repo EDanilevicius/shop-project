@@ -14,8 +14,8 @@
     font-size: 28px;
     text-transform: uppercase;
   }
-  span {
-    padding: 5px;
+  .Price {
+    font-size: 20px;
   }
   p {
     padding-bottom: 30px;
@@ -24,8 +24,23 @@
     position: absolute;
     bottom: 0;
     :hover {
-      transform: scale(2);
+      transform: scale(1.5);
       background-color: rgba(81, 255, 0, 0.863);
+    }
+    input {
+      text-align: right;
+      font-size: 22px;
+      font-weight: 700;
+      font-family: "Roboto", sans-serif;
+      -webkit-appearance: none;
+      box-sizing: border-box;
+      border: none;
+      background: transparent;
+      max-width: 120px;
+    }
+    input[type="number"]::-webkit-inner-spin-button {
+      opacity: 1;
+      margin-left: 20px;
     }
   }
 }

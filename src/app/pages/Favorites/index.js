@@ -1,19 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ProductCard } from "../../components";
-import "./index.scss";
+import { ProductCard, ProductContainer } from "../../components";
 
-function Favorites({ products, toggleFavorite }) {
+function Favorites({ products, toggleFavorite, updateCartCount }) {
   return (
-    <div className="Products-Page">
+    <ProductContainer>
       {products.map(product => (
         <ProductCard
           key={product.id}
           {...product}
           toggleFavorite={toggleFavorite}
+          updateCartCount={updateCartCount}
         />
       ))}
-    </div>
+    </ProductContainer>
   );
 }
 
@@ -21,14 +21,10 @@ Favorites.propTypes = {
   products: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
-      currencySymbol: PropTypes.string.isRequired,
-      price: PropTypes.string.isRequired,
-      isFavorite: PropTypes.bool.isRequired,
     })
   ),
   toggleFavorite: PropTypes.func.isRequired,
+  updateCartCount: PropTypes.func.isRequired,
 };
 
 Favorites.defaultProps = {
