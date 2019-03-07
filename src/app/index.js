@@ -3,11 +3,11 @@ import { PacmanLoader } from "react-spinners";
 import { Shop, Favorites, Cart } from "./pages";
 import { PageLayout } from "./components";
 
-const NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
-  <button type="button" href="#" onClick={() => console.log(link)}>
-    {link}
-  </button>
-));
+// const NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
+//   <button type="button" href="#" onClick={() => this.setState({ route: link })}>
+//     {link}
+//   </button>
+// ));
 
 class App extends React.Component {
   constructor(props) {
@@ -18,6 +18,16 @@ class App extends React.Component {
       loading: false,
       route: "shop",
     };
+
+    this.NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
+      <button
+        type="button"
+        href="#"
+        onClick={() => this.setState({ route: link })}
+      >
+        {link}
+      </button>
+    ));
   }
 
   componentDidMount() {
@@ -99,10 +109,10 @@ class App extends React.Component {
   };
 
   render() {
-    const { products, loading, error } = this.state;
+    const { loading, error } = this.state;
 
     return (
-      <PageLayout navLinks={NAV_LINKS}>
+      <PageLayout navLinks={this.NAV_LINKS}>
         {loading && <PacmanLoader />}
         {error && <h2 className="errorMessage">{error}</h2>}
         {this.renderRoute()}
