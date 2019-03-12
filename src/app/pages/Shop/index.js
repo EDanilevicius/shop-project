@@ -2,7 +2,18 @@ import React from "react";
 import PropTypes from "prop-types";
 import { ProductCard, ProductContainer } from "../../components";
 
-function Shop({ products, toggleFavorite, updateCartCount }) {
+function Shop({
+  products,
+  toggleFavorite,
+  updateCartCount,
+  login,
+  allow,
+  logout,
+  history,
+  location,
+}) {
+  const  intended  = location.state && location.state.intendedLocation;
+
   return (
     <ProductContainer>
       {products.map(product => (
@@ -13,11 +24,20 @@ function Shop({ products, toggleFavorite, updateCartCount }) {
           updateCartCount={updateCartCount}
         />
       ))}
+      {allow && (
+        <button type="button" onClick={() => history.push("/cart")}>
+          Go to Checkout
+        </button>
+      )}
+      <button type="button" onClick={() => (allow ? logout : login(intended))}>
+        {allow ? "Logout" : "Login"}
+      </button>
     </ProductContainer>
   );
 }
 
 Shop.propTypes = {
+  history: PropTypes.shape({}).isRequired,
   products: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

@@ -3,11 +3,27 @@ import { PacmanLoader } from "react-spinners";
 import {
   BrowserRouter as Router,
   Route,
-  Link,
+  NavLink,
   Redirect,
+  Switch,
 } from "react-router-dom";
-import { Shop, Favorites, Cart } from "./pages";
+import { Shop, Favorites, Cart, PageNotFound } from "./pages";
 import { PageLayout } from "./components";
+
+function PrivateRoute({ allow, path, ...props }) {
+  if (allow) {
+    return <Route {...props} path={path} />;
+  }
+
+  return (
+    <Redirect
+      to={{
+        pathname: "/shop",
+        state: { intendedLocation: path },
+      }}
+    />
+  );
+}
 
 // const NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
 //   <button type="button" href="#" onClick={() => this.setState({ route: link })}>
@@ -22,10 +38,11 @@ class App extends React.Component {
       products: [],
       error: null,
       loading: false,
+      allow: false,
     };
 
     this.NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
-      <Link to={`/${link}`}>{link}</Link>
+      <NavLink to={`/${link}`}>{link}</NavLink>
     ));
   }
 
@@ -69,11 +86,26 @@ class App extends React.Component {
     }));
   };
 
-  renderShop = () => {
-    const { products } = this.state;
+  login = (intended, history) => {
+    this.setState({ allow: true }, () => {
+      history.replace(intended || "/favorites");
+    });
+  };
+
+  logout = () => {
+    console.log("logout");
+    this.setState({ allow: false });
+  };
+
+  renderShop = props => {
+    const { products, allow } = this.state;
 
     return (
       <Shop
+        {...props}
+        allow={allow}
+        login={intended => this.login(intended, props.history)}
+        logout={this.logout}
         products={products}
         toggleFavorite={this.toggleFavorite}
         updateCartCount={this.updateCartCount}
@@ -100,17 +132,26 @@ class App extends React.Component {
   };
 
   render() {
-    const { loading, error } = this.state;
+    const { loading, error, allow } = this.state;
 
     return (
       <Router>
         <PageLayout navLinks={this.NAV_LINKS}>
           {loading && <PacmanLoader />}
           {error && <h2 className="errorMessage">{error}</h2>}
-          <Route exact path="/shop" component={this.renderShop} />
-          <Route path="/favorites" component={this.renderFavorites} />
-          <Route path="/cart" component={this.renderCart} />
-          <Redirect exact from="/" to="/shop" />
+          <Switch>
+            <Route exact path="/shop" component={this.renderShop} />
+            <Route exact path="/favorites" component={this.renderFavorites} />
+            <PrivateRoute
+              allow={allow}
+              exact
+              path="/cart"
+              component={this.renderCart}
+            />
+            <Route exact path="/404" component={PageNotFound} />
+            <Redirect exact from="/" to="/shop" />
+            <Redirect to="/404" />
+          </Switch>
         </PageLayout>
       </Router>
     );
