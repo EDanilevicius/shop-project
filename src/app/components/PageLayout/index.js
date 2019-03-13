@@ -7,8 +7,8 @@ function PageLayout({ children, navLinks }) {
     <div className="Page-Layout">
       <header>
         <img
-          src="https://pngimage.net/wp-content/uploads/2018/05/dummy-logo-png-3.png"
-          alt="Factory company logo"
+          src="https://cdn6.f-cdn.com/contestentries/935496/23480148/58a670ed3dca2_thumb900.jpg"
+          alt="Shop company logo"
           className="Logo"
         />
         <nav>

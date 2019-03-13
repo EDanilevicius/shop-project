@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { ProductCard, ProductContainer } from "../../components";
 
@@ -12,7 +13,7 @@ function Shop({
   history,
   location,
 }) {
-  const  intended  = location.state && location.state.intendedLocation;
+  const intended = location.state && location.state.intendedLocation;
 
   return (
     <ProductContainer>
@@ -51,4 +52,22 @@ Shop.defaultProps = {
   products: [],
 };
 
-export default Shop;
+function mapStateToProps(state) {
+  return {
+    products: state.products,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleFavorite: id =>
+      dispatch({ type: "TOGGLE_FAVORITE_PRODUCT", payload: id }),
+    updateCartCount: (id, count) =>
+      dispatch({ type: "UPDATE_PRODUCT_CART_COUNT", payload: { id, count } }),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Shop);

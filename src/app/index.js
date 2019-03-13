@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { PacmanLoader } from "react-spinners";
 import {
   BrowserRouter as Router,
@@ -38,7 +39,7 @@ class App extends React.Component {
       products: [],
       error: null,
       loading: false,
-      allow: false,
+      allow: true,
     };
 
     this.NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
@@ -47,7 +48,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    const { getProducts, getProductsSuccess, getProductsFailure } = this.props;
+
+    getProducts();
     fetch("https://boiling-reaches-93648.herokuapp.com/food-shop/products")
       .then(response => response.json())
       .then(json => {
@@ -56,11 +59,9 @@ class App extends React.Component {
           isFavorite: false,
           cartCount: 0,
         }));
-        this.setState({ products, loading: false });
+        getProductsSuccess(products);
       })
-      .catch(() =>
-        this.setState({ error: "Something gone wrong", loading: false })
-      );
+      .catch(() => getProductsFailure("Something went wrong"));
   }
 
   toggleFavorite = id => {
@@ -97,33 +98,6 @@ class App extends React.Component {
     this.setState({ allow: false });
   };
 
-  renderShop = props => {
-    const { products, allow } = this.state;
-
-    return (
-      <Shop
-        {...props}
-        allow={allow}
-        login={intended => this.login(intended, props.history)}
-        logout={this.logout}
-        products={products}
-        toggleFavorite={this.toggleFavorite}
-        updateCartCount={this.updateCartCount}
-      />
-    );
-  };
-
-  renderFavorites = () => {
-    const { products } = this.state;
-    return (
-      <Favorites
-        products={products.filter(product => product.isFavorite)}
-        toggleFavorite={this.toggleFavorite}
-        updateCartCount={this.updateCartCount}
-      />
-    );
-  };
-
   renderCart = () => {
     const { products } = this.state;
     return (
@@ -132,7 +106,8 @@ class App extends React.Component {
   };
 
   render() {
-    const { loading, error, allow } = this.state;
+    const { allow } = this.state;
+    const { loading, error } = this.props;
 
     return (
       <Router>
@@ -140,8 +115,8 @@ class App extends React.Component {
           {loading && <PacmanLoader />}
           {error && <h2 className="errorMessage">{error}</h2>}
           <Switch>
-            <Route exact path="/shop" component={this.renderShop} />
-            <Route exact path="/favorites" component={this.renderFavorites} />
+            <Route exact path="/shop" component={Shop} />
+            <Route exact path="/favorites" component={Favorites} />
             <PrivateRoute
               allow={allow}
               exact
@@ -158,4 +133,23 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    error: state.error,
+    loading: state.loading,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    getProducts: () => dispatch({ type: "FETCH_PRODUCTS" }),
+    getProductsSuccess: payload =>
+      dispatch({ type: "FETCH_PRODUCTS_SUCCESS", payload }),
+    getProductsFailure: payload =>
+      dispatch({ type: "FETCH_PRODUCTS_FAILURE", payload }),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
