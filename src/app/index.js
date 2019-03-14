@@ -26,19 +26,10 @@ function PrivateRoute({ allow, path, ...props }) {
   );
 }
 
-// const NAV_LINKS = ["shop", "cart", "favorites"].map(link => (
-//   <button type="button" href="#" onClick={() => this.setState({ route: link })}>
-//     {link}
-//   </button>
-// ));
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      products: [],
-      error: null,
-      loading: false,
       allow: true,
     };
 
@@ -64,29 +55,6 @@ class App extends React.Component {
       .catch(() => getProductsFailure("Something went wrong"));
   }
 
-  toggleFavorite = id => {
-    // console.log("Toggle Favorite", id);
-    this.setState(state => ({
-      products: state.products.map(product => {
-        if (product.id === id) {
-          return { ...product, isFavorite: !product.isFavorite };
-        }
-        return product;
-      }),
-    }));
-  };
-
-  updateCartCount = (id, value) => {
-    this.setState(state => ({
-      products: state.products.map(product => {
-        if (product.id === id) {
-          return { ...product, cartCount: value };
-        }
-        return product;
-      }),
-    }));
-  };
-
   login = (intended, history) => {
     this.setState({ allow: true }, () => {
       history.replace(intended || "/favorites");
@@ -96,13 +64,6 @@ class App extends React.Component {
   logout = () => {
     console.log("logout");
     this.setState({ allow: false });
-  };
-
-  renderCart = () => {
-    const { products } = this.state;
-    return (
-      <Cart products={products.filter(product => product.cartCount > 0)} />
-    );
   };
 
   render() {
@@ -117,12 +78,7 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/shop" component={Shop} />
             <Route exact path="/favorites" component={Favorites} />
-            <PrivateRoute
-              allow={allow}
-              exact
-              path="/cart"
-              component={this.renderCart}
-            />
+            <PrivateRoute allow={allow} exact path="/cart" component={Cart} />
             <Route exact path="/404" component={PageNotFound} />
             <Redirect exact from="/" to="/shop" />
             <Redirect to="/404" />

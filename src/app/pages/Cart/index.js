@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { ProductContainer } from "../../components";
 import "./index.scss";
 
@@ -40,4 +41,10 @@ Cart.defaultProps = {
   products: [],
 };
 
-export default Cart;
+function mapStateToProps(state) {
+  return {
+    products: state.products.filter(product => product.cartCount > 0),
+  };
+}
+
+export default connect(mapStateToProps)(Cart);
