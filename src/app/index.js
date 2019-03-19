@@ -108,7 +108,7 @@ const enhance = connect(
   state => ({
     error: state.shop.error,
     loading: state.shop.loading,
-    isLogged: !!state.auth.token,
+    isLogged: auth.selectors.isLogged(state),
   }),
   dispatch => ({
     getProducts: () => dispatch({ type: shop.types.FETCH_PRODUCTS }),

@@ -58,9 +58,7 @@ Login.propTypes = {
 };
 
 const enhance = connect(
-  state => ({
-    isLogged: !!state.auth.token,
-  }),
+  null,
   dispatch => ({
     login: () => dispatch({ type: auth.types.LOGIN }),
   })
