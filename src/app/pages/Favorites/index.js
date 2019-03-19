@@ -29,14 +29,11 @@ Favorites.propTypes = {
   updateCartCount: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
+const enhance = connect(
+  state => ({
     products: state.shop.products.filter(product => product.isFavorite),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
+  }),
+  dispatch => ({
     toggleFavorite: id =>
       dispatch({ type: shop.types.TOGGLE_FAVORITE_PRODUCT, payload: id }),
     updateCartCount: (id, count) =>
@@ -44,10 +41,7 @@ function mapDispatchToProps(dispatch) {
         type: shop.types.UPDATE_PRODUCT_CART_COUNT,
         payload: { id, count },
       }),
-  };
-}
+  })
+);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Favorites);
+export default enhance(Favorites);

@@ -22,10 +22,6 @@ PrivateRoute.propTypes = {
   path: PropTypes.string.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    isLogged: !!state.auth.token,
-  };
-}
+const enhance = connect(state => ({ isLogged: !!state.auth.token }));
 
-export default connect(mapStateToProps)(PrivateRoute);
+export default enhance(PrivateRoute);

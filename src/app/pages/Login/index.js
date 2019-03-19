@@ -57,19 +57,13 @@ Login.propTypes = {
   login: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
+const enhance = connect(
+  state => ({
     isLogged: !!state.auth.token,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
+  }),
+  dispatch => ({
     login: () => dispatch({ type: auth.types.LOGIN }),
-  };
-}
+  })
+);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Login);
+export default enhance(Login);
