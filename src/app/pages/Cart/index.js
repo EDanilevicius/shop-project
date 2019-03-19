@@ -43,7 +43,7 @@ Cart.defaultProps = {
 
 function mapStateToProps(state) {
   return {
-    products: state.products.filter(product => product.cartCount > 0),
+    products: state.shop.products.filter(product => product.cartCount > 0),
   };
 }
 

@@ -11,13 +11,7 @@ function PageLayout({ children, navLinks }) {
           alt="Shop company logo"
           className="Logo"
         />
-        <nav>
-          {navLinks.map((link, i) => (
-            <span key={i} className="Nav-Link">
-              {link}
-            </span>
-          ))}
-        </nav>
+        <nav>{navLinks}</nav>
       </header>
       <main>{children}</main>
       <footer>© Copyright 2019</footer>

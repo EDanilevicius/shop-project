@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { ProductCard, ProductContainer } from "../../components";
+import shop from "../../../shop";
 
 function Favorites({ products, toggleFavorite, updateCartCount }) {
   return (
@@ -23,27 +24,26 @@ Favorites.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
     })
-  ),
+  ).isRequired,
   toggleFavorite: PropTypes.func.isRequired,
   updateCartCount: PropTypes.func.isRequired,
 };
 
-Favorites.defaultProps = {
-  products: [],
-};
-
 function mapStateToProps(state) {
   return {
-    products: state.products.filter(product => product.isFavorite),
+    products: state.shop.products.filter(product => product.isFavorite),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     toggleFavorite: id =>
-      dispatch({ type: "TOGGLE_FAVORITE_PRODUCT", payload: id }),
+      dispatch({ type: shop.types.TOGGLE_FAVORITE_PRODUCT, payload: id }),
     updateCartCount: (id, count) =>
-      dispatch({ type: "UPDATE_PRODUCT_CART_COUNT", payload: { id, count } }),
+      dispatch({
+        type: shop.types.UPDATE_PRODUCT_CART_COUNT,
+        payload: { id, count },
+      }),
   };
 }
 
