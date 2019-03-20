@@ -1,3 +1,4 @@
+import { RSAA } from "redux-api-middleware";
 import * as types from "./actionTypes";
 
 export const toggleFavorite = id => ({
@@ -10,23 +11,38 @@ export const updateCartCount = (id, count) => ({
   payload: { id, count },
 });
 
-export const getProducts = () => dispatch => {
-  dispatch({ type: types.FETCH_PRODUCTS });
-
-  fetch("https://boiling-reaches-93648.herokuapp.com/food-shop/products")
-    .then(response => response.json())
-    .then(json => {
-      const products = json.map(product => ({
-        ...product,
-        isFavorite: false,
-        cartCount: 0,
-      }));
-      dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, payload: products });
-    })
-    .catch(() =>
-      dispatch({
+export const getProducts = () => ({
+  [RSAA]: {
+    endpoint: "https://boiling-reaches-93648.herokuapp.com/food-shop/products",
+    method: "GET",
+    types: [
+      types.FETCH_PRODUCTS,
+      { types: types.FETCH_PRODUCTS_SUCCESS },
+      {
         type: types.FETCH_PRODUCTS_FAILURE,
-        payload: "Something went wrong",
-      })
-    );
-};
+        payload: () => "Something went wrong!",
+      },
+    ],
+  },
+});
+
+// export const getProducts = () => dispatch => {
+//   dispatch({ type: types.FETCH_PRODUCTS });
+
+//   fetch("https://boiling-reaches-93648.herokuapp.com/food-shop/products")
+//     .then(response => response.json())
+//     .then(json => {
+//       const products = json.map(product => ({
+//         ...product,
+//         isFavorite: false,
+//         cartCount: 0,
+//       }));
+//       dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, payload: products });
+//     })
+//     .catch(() =>
+//       dispatch({
+//         type: types.FETCH_PRODUCTS_FAILURE,
+//         payload: "Something went wrong",
+//       })
+//     );
+// };
