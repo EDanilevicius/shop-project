@@ -106,8 +106,8 @@ class App extends React.Component {
 
 const enhance = connect(
   state => ({
-    error: state.shop.error,
-    loading: state.shop.loading,
+    error: shop.selectors.getError(state),
+    loading: shop.selectors.isLoading(state),
     isLogged: auth.selectors.isLogged(state),
   }),
   dispatch => ({
